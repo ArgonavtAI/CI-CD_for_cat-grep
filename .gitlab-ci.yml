@@ -1,0 +1,50 @@
+stages:
+    - build
+    - style
+    - test
+    - deploy
+
+DO6_build:
+    stage: build
+    tags: 
+      - build_tags
+    script:
+      - cd src/cat
+      - make s21_cat
+      - cd ../grep
+      - make s21_grep
+    artifacts:
+      paths:
+        - src/cat/s21_cat
+        - src/grep/s21_grep
+      expire_in: 30 days
+
+DO6_style:
+    stage: style
+    tags:
+      - style_tags
+    script:
+      - cd src/cat
+      - clang-format --Werror -n *.c
+      - cd ../grep
+      - clang-format --Werror -n *.c
+    allow_failure: false
+
+DO6_test:
+    stage: test
+    tags:
+      - test_tags
+    script:
+      - cd src/cat
+      - bash test_func_cat.sh
+      - cd ../grep
+      - bash test_func_grep.sh
+    when: on_success
+
+DO6_deploy:
+  stage: deploy
+  tags: 
+    - deploy_tags
+  script:
+    - bash src/copy.sh
+  when: manual
