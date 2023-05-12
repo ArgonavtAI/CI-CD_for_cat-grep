@@ -7,7 +7,7 @@ stages:
 DO6_build:
     stage: build
     tags: 
-      - build_tags
+      - build
     script:
       - cd src/cat
       - make s21_cat
@@ -22,7 +22,7 @@ DO6_build:
 DO6_style:
     stage: style
     tags:
-      - style_tags
+      - style
     script:
       - cd src/cat
       - clang-format --Werror -n *.c
@@ -33,7 +33,7 @@ DO6_style:
 DO6_test:
     stage: test
     tags:
-      - test_tags
+      - test
     script:
       - cd src/cat
       - bash test_func_cat.sh
@@ -44,7 +44,7 @@ DO6_test:
 DO6_deploy:
   stage: deploy
   tags: 
-    - deploy_tags
+    - deploy
   script:
     - bash src/copy.sh
   when: manual
