@@ -18,6 +18,8 @@ DO6_build:
         - src/cat/s21_cat
         - src/grep/s21_grep
       expire_in: 30 days
+      after_script:
+      - sh src/telegram.sh "build"
 
 DO6_style:
     stage: style
@@ -29,6 +31,8 @@ DO6_style:
       - cd ../grep
       - clang-format --Werror -n *.c
     allow_failure: false
+    after_script:
+      - sh src/telegram.sh "style"
 
 DO6_test:
     stage: test
@@ -40,6 +44,8 @@ DO6_test:
       - cd ../grep
       - bash test_func_grep.sh
     when: on_success
+    after_script:
+      - sh src/telegram.sh "test"
 
 DO6_deploy:
   stage: deploy
@@ -48,3 +54,5 @@ DO6_deploy:
   script:
     - bash src/copy.sh
   when: manual
+  after_script:
+    - sh src/telegram.sh "deploy"
